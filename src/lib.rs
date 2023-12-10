@@ -1,6 +1,10 @@
 //! Extreme Learning Machine (ELM) crate. A minimalistic and flexible crate that can be used to train ELMs, a type of
 //! Neural Networks. Currently supports a single hidden layer and regression tasks.
 //!
+//! References:
+//!
+//! - Original paper: <https://ieeexplore.ieee.org/document/1380068>
+//!
 //! - Wikipedia: <https://en.wikipedia.org/wiki/Extreme_learning_machine>
 
 
@@ -31,7 +35,7 @@ pub struct ELM {
     hidden: DMatrix<f64>,
     beta: Option<DMatrix<f64>>,
     training_metrics: ELMTrainingMetrics,
-    epsilon: Epsilon,   
+    epsilon: Epsilon,
     verbose: Verbose,
 }
 
