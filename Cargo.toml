@@ -1,0 +1,19 @@
+[package]
+name = "elm"
+version = "0.1.0"
+edition = "2021"
+authors = [
+    "Marcos Blanco Fernandes <mbfernan@outlook.com>"
+]
+description = "git "
+license = "MIT"
+repository = "https://github.com/mbfernan/elm.git"
+keywords = ["artificial-intelligence", "blas", "extreme-learning-machine", "machine-learning", "neural-network"]
+categories = ["mathematics", "science", "science::neuroscience", "science::robotics", "science::robotics"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+nalgebra = "0.32.3"
+rand = "0.8.5"
+rand_distr = "0.4.3"
