@@ -8,7 +8,7 @@ authors = [
 description = "git "
 license = "MIT"
 repository = "https://github.com/mbfernan/elm.git"
-keywords = ["artificial-intelligence", "blas", "extreme-learning-machine", "machine-learning", "neural-network"]
+keywords = ["ai", "blas", "elm", "machine-learning", "neural-network"]
 categories = ["mathematics", "science", "science::neuroscience", "science::robotics", "science::robotics"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
