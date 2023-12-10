@@ -1,8 +1,16 @@
 # Extreme Learning Machines (ELMs)
 
-A minimalistic crate that can be used to train ELMs (Neural Networks) for predicting regression tasks.
+Extreme Learning Machine (ELM) crate. A minimalistic and flexible crate that can be used to train ELMs,
+a type of Neural Networks. Currently supports a single hidden layer and regression tasks.
 
-## Usage
+References:
+
+- Original paper: <https://ieeexplore.ieee.org/document/1380068>
+
+- Wikipedia: <https://en.wikipedia.org/wiki/Extreme_learning_machine>
+
+
+## Basic usage
 
 ```RUST
 use elm::{ELM, Epsilon, Verbose};
