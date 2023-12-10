@@ -1,17 +1,17 @@
 [package]
 name = "elm"
+description = "A minimalist framework for Extreme Learning Machines (ELMs)."
 version = "0.1.2"
 edition = "2021"
+license = "MIT"
+keywords = ["ai", "blas", "elm", "machine-learning", "neural-network"]
+categories = ["mathematics", "science", "science::neuroscience", "science::robotics", "science::robotics"]
+repository = "https://github.com/mbfernan/elm.git"
 authors = [
     "Marcos Blanco Fernandes <mbfernan@outlook.com>"
 ]
-description = "A minimalist framework for Extreme Learning Machines (ELMs)."
-license = "MIT"
-repository = "https://github.com/mbfernan/elm.git"
-keywords = ["ai", "blas", "elm", "machine-learning", "neural-network"]
-categories = ["mathematics", "science", "science::neuroscience", "science::robotics", "science::robotics"]
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
 
 [dependencies]
 nalgebra = "0.32.3"
