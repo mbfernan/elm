@@ -24,3 +24,8 @@ elm.train(&inputs, &targets);
 let new_inputs: Vec<Vec<f64>> = vec![vec![1.0, 4.0], vec![1.3, 0.6]];
 let prediction = elm.predict(&new_inputs);
 ```
+
+## Road map
+
+- [ ] Export module: to save and load previously trained models
+- [ ] Additional activation functions
