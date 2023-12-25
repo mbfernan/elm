@@ -17,6 +17,10 @@ pub enum ActivationFunction {
     ///
     /// - Wikipedia: <https://en.wikipedia.org/wiki/Sigmoid_function>
     Sigmoidal,
+    /// Linear
+    ///
+    /// Not widely used in the ELM environment.
+    Linear,
 }
 
 /// Map ActivationFunction enum variant to its function
@@ -24,6 +28,7 @@ pub fn map(activation_function: &ActivationFunction) -> fn(&mut f64) {
     match activation_function {
         ActivationFunction::LeakyRelu => leaky_relu,
         ActivationFunction::Sigmoidal => sigmoidal,
+        ActivationFunction::Linear => linear,
     }
 }
 
@@ -56,7 +61,7 @@ pub fn leaky_relu(x: &mut f64) {
 /// use elm::activation_functions::sigmoidal;
 ///
 /// // When x == 0
-/// let mut x = 0f64;
+/// let mut x = 0.0;
 /// sigmoidal(&mut x);
 /// assert_eq!(x, 0.5);
 ///
@@ -75,3 +80,17 @@ pub fn leaky_relu(x: &mut f64) {
 pub fn sigmoidal(x: &mut f64) {
     *x = 1.0 / (1.0 + E.powf(-(*x)))
 }
+
+/// [`Linear`]
+///
+/// ```
+/// use elm::activation_functions::linear;
+///
+/// // When x == 0
+/// let mut x = 18.04;
+/// linear(&mut x);
+/// assert_eq!(x, 18.04);
+/// ```
+///
+/// [`Linear`]: enum.ActivationFunction.html#variant.linear
+pub fn linear(_x: &mut f64) {}
