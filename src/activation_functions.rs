@@ -21,8 +21,14 @@ pub enum ActivationFunction {
     ///
     /// Not widely used in the ELM environment.
     Linear,
-    /// Step function
+    /// Step function at 0
     Step,
+    /// Hyperbolic tangent
+    ///
+    ///  # References:
+    ///
+    /// - Wikipedia: <https://en.wikipedia.org/wiki/Hyperbolic_functions>
+    TanH,
 }
 
 /// Map ActivationFunction enum variant to its function
@@ -32,6 +38,7 @@ pub fn map(activation_function: &ActivationFunction) -> fn(&mut f64) {
         ActivationFunction::Sigmoidal => sigmoidal,
         ActivationFunction::Linear => linear,
         ActivationFunction::Step => step,
+        ActivationFunction::TanH => tanh,
     }
 }
 
@@ -81,7 +88,7 @@ pub fn leaky_relu(x: &mut f64) {
 ///
 /// [`Sigmoidal`]: enum.ActivationFunction.html#variant.sigmoidal
 pub fn sigmoidal(x: &mut f64) {
-    *x = 1.0 / (1.0 + E.powf(-(*x)))
+    *x = 1.0 / (1.0 + E.powf(-(*x)));
 }
 
 /// [`Linear`]
@@ -127,4 +134,31 @@ pub fn step(x: &mut f64) {
     } else {
         *x = 1.0;
     }
+}
+
+/// [`Hyperbolic Tangent`]
+///
+/// ```
+/// use elm::activation_functions::tanh;
+///
+/// // When x == 0.0
+/// let mut x = 0.0;
+/// tanh(&mut x);
+/// assert_eq!(x, 0.0);
+///
+/// // When x >> 0.0
+/// let mut x = 10000.0;
+/// tanh(&mut x);
+/// assert_eq!(x, 1.0);
+///
+/// // When x << 0.0
+/// let mut x = -10000.0;
+/// tanh(&mut x);
+/// assert_eq!(x, -1.0);
+///
+/// ```
+///
+/// [`Hyperbolic Tangent`]: enum.ActivationFunction.html#variant.TanH
+pub fn tanh(x: &mut f64) {
+    *x = 2.0 / (1.0 + E.powf(-2.0 * (*x))) - 1.0;
 }
