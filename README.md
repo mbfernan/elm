@@ -25,8 +25,23 @@ let new_inputs: Vec<Vec<f64>> = vec![vec![1.0, 4.0], vec![1.3, 0.6]];
 let prediction = elm.predict(&new_inputs);
 ```
 
+## Activation functions
+
+![ELU](https://github.com/mbfernan/elm/blob/e3d5484c9680773f4694a8c88f15646fab399a3d/src/docs/activation_functions/Exponential%20Linear%20Units.png)
+
+![LeakyReLU](https://github.com/mbfernan/elm/blob/e3d5484c9680773f4694a8c88f15646fab399a3d/src/docs/activation_functions/Leaky%20Rectified%20Linear%20Units.png)
+
+![Linear](https://github.com/mbfernan/elm/blob/e3d5484c9680773f4694a8c88f15646fab399a3d/src/docs/activation_functions/Linear.png)
+
+![ReLU](https://github.com/mbfernan/elm/blob/e3d5484c9680773f4694a8c88f15646fab399a3d/src/docs/activation_functions/Rectified%20Linear%20Units.png)
+
+![Sigmoidal](https://github.com/mbfernan/elm/blob/e3d5484c9680773f4694a8c88f15646fab399a3d/src/docs/activation_functions/Rectified%20Linear%20Units.png)
+
+![Step](https://github.com/mbfernan/elm/blob/e3d5484c9680773f4694a8c88f15646fab399a3d/src/docs/activation_functions/Step.png)
+
+![TanH](https://github.com/mbfernan/elm/blob/e3d5484c9680773f4694a8c88f15646fab399a3d/src/docs/activation_functions/Hyperbolic%20Tangent.png)
+
 ## Road map
 
 - [ ] Export module: to save and load previously trained models
 - [ ] Loss trait to allow custom implementations
-- [ ] Add illustrations for activation functions

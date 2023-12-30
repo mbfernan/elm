@@ -8,6 +8,8 @@ pub enum ActivationFunction {
     /// # Papers:
     ///
     /// - (2016) <https://arxiv.org/pdf/1511.07289.pdf>
+    ///
+    /// ![ELU](https://github.com/mbfernan/elm/blob/e3d5484c9680773f4694a8c88f15646fab399a3d/src/docs/activation_functions/Exponential%20Linear%20Units.png)
     ELU,
     /// Leaky Rectified Linear Units
     ///
@@ -16,8 +18,12 @@ pub enum ActivationFunction {
     /// - (2013) <https://ai.stanford.edu/%7Eamaas/papers/relu_hybrid_icml2013_final.pdf>
     ///
     /// - (2015) <https://arxiv.org/abs/1505.00853>
+    ///
+    /// ![LeakyReLU](https://github.com/mbfernan/elm/blob/e3d5484c9680773f4694a8c88f15646fab399a3d/src/docs/activation_functions/Leaky%20Rectified%20Linear%20Units.png)
     LeakyReLU,
     /// Identity
+    ///
+    /// ![Linear](https://github.com/mbfernan/elm/blob/e3d5484c9680773f4694a8c88f15646fab399a3d/src/docs/activation_functions/Linear.png)
     Linear,
     /// Rectified Linear Units
     ///
@@ -26,20 +32,28 @@ pub enum ActivationFunction {
     /// - (2010) <https://www.cs.toronto.edu/~hinton/absps/reluICML.pdf>
     ///
     /// - (2018) <https://arxiv.org/abs/1803.08375>
+    ///
+    /// ![ReLU](https://github.com/mbfernan/elm/blob/e3d5484c9680773f4694a8c88f15646fab399a3d/src/docs/activation_functions/Rectified%20Linear%20Units.png)
     ReLU,
     /// Sigmoidal
     ///
     /// # References:
     ///
     /// - Wikipedia: <https://en.wikipedia.org/wiki/Sigmoid_function>
+    ///
+    /// ![Sigmoidal](https://github.com/mbfernan/elm/blob/e3d5484c9680773f4694a8c88f15646fab399a3d/src/docs/activation_functions/Rectified%20Linear%20Units.png)
     Sigmoidal,
     /// Step function at 0
+    ///
+    /// ![Step](https://github.com/mbfernan/elm/blob/e3d5484c9680773f4694a8c88f15646fab399a3d/src/docs/activation_functions/Step.png)
     Step,
     /// Hyperbolic tangent
     ///
     ///  # References:
     ///
     /// - Wikipedia: <https://en.wikipedia.org/wiki/Hyperbolic_functions>
+    ///
+    /// ![TanH](https://github.com/mbfernan/elm/blob/e3d5484c9680773f4694a8c88f15646fab399a3d/src/docs/activation_functions/Hyperbolic%20Tangent.png)
     TanH,
 }
 
