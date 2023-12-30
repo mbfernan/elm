@@ -44,4 +44,3 @@ let prediction = elm.predict(&new_inputs);
 ## Road map
 
 - [ ] Export module: to save and load previously trained models
-- [ ] Loss trait to allow custom implementations

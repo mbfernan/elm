@@ -5,7 +5,7 @@ const E: f64 = std::f64::consts::E;
 pub enum ActivationFunction {
     /// Exponential Linear Units
     ///
-    /// ## Papers:
+    /// # Papers:
     ///
     /// - (2016) <https://arxiv.org/pdf/1511.07289.pdf>
     ///
@@ -13,7 +13,7 @@ pub enum ActivationFunction {
     ELU,
     /// Leaky Rectified Linear Units
     ///
-    /// ## Papers:
+    /// # Papers:
     ///
     /// - (2013) <https://ai.stanford.edu/%7Eamaas/papers/relu_hybrid_icml2013_final.pdf>
     ///
@@ -27,7 +27,7 @@ pub enum ActivationFunction {
     Linear,
     /// Rectified Linear Units
     ///
-    /// ## Papers:
+    /// # Papers:
     ///
     /// - (2010) <https://www.cs.toronto.edu/~hinton/absps/reluICML.pdf>
     ///
@@ -37,7 +37,7 @@ pub enum ActivationFunction {
     ReLU,
     /// Sigmoidal
     ///
-    /// ## References:
+    /// # References:
     ///
     /// - Wikipedia: <https://en.wikipedia.org/wiki/Sigmoid_function>
     ///
@@ -49,7 +49,7 @@ pub enum ActivationFunction {
     Step,
     /// Hyperbolic tangent
     ///
-    /// ## References:
+    /// # References:
     ///
     /// - Wikipedia: <https://en.wikipedia.org/wiki/Hyperbolic_functions>
     ///

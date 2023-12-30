@@ -4,13 +4,13 @@ use crate::{flatten_matrix, ToMatrix};
 pub enum Loss {
     /// Mean Squared Error
     ///
-    /// ## References
+    /// # References
     ///
     /// - Wikipedia: <https://en.wikipedia.org/wiki/Mean_squared_error>
     MSE,
     /// Custom Loss function
     ///
-    /// ## Usage
+    /// # Usage
     ///
     /// ```
     /// use elm::loss::Loss;
@@ -30,13 +30,13 @@ pub enum Loss {
     /// assert_eq!(loss, 1.0);
     ///
     /// ```
-    Custom(fn(&[f64], &[f64]) -> f64)
+    Custom(fn(&[f64], &[f64]) -> f64),
 }
 
 impl Loss {
     /// Calculate loss between predicted and target values.
     ///
-    /// ## Usage
+    /// # Usage
     ///
     /// ```
     /// use elm::loss::Loss;
@@ -66,12 +66,8 @@ impl Loss {
         }
 
         match self {
-            Loss::MSE => {
-                mse(&flattened_predictions, &flattened_targets)
-            }
-            Loss::Custom(function) => {
-                function(&flattened_predictions, &flattened_targets)
-            }
+            Loss::MSE => mse(&flattened_predictions, &flattened_targets),
+            Loss::Custom(function) => function(&flattened_predictions, &flattened_targets),
         }
     }
 }
@@ -80,6 +76,8 @@ fn mse(predictions: &[f64], targets: &[f64]) -> f64 {
     predictions
         .iter()
         .zip(targets.iter())
-        .fold(0.0, |acc, (prediction, target)| acc + (prediction - target).powi(2))
+        .fold(0.0, |acc, (prediction, target)| {
+            acc + (prediction - target).powi(2)
+        })
         / predictions.len() as f64
 }

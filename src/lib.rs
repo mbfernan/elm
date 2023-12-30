@@ -86,11 +86,11 @@ impl ELM {
     ///
     /// **targets** shape: (n_data_points x output_size)
     ///
-    /// ## Data types:
+    /// # Data types:
     ///
     /// This function accepts inputs and targets as `Vec<Vec<f64>>` or `nalgebra::DMatrix<f64>`.
     ///
-    /// ## Examples
+    /// # Examples
     ///
     /// Basic usage:
     ///
@@ -131,11 +131,11 @@ impl ELM {
     /// elm.train(&inputs, &targets);
     /// ```
     ///
-    /// ## Panics:
+    /// # Panics:
     ///
     /// Panics if inputs and targets have different number of data points.
     ///
-    /// ## Performance:
+    /// # Performance:
     ///
     /// If failed to calculate **pseudo inverse**, Beta will be set to `None` and no training metrics will be available.
     pub fn train<T: ToMatrix, I: ToMatrix + FromMatrix>(&mut self, inputs: &I, targets: &T) {
@@ -151,12 +151,12 @@ impl ELM {
     /// Forward pass on ELM, used to predict values based on inputs provided and once the ELM has already being
     /// [`trained`].
     ///
-    /// ## Data types:
+    /// # Data types:
     ///
     /// This function accepts inputs as `Vec<Vec<f64>>` or `nalgebra::DMatrix<f64>`.
     /// Outputs will have the same type as the inputs.
     ///
-    /// ## Examples
+    /// # Examples
     ///
     /// Basic usage:
     ///
