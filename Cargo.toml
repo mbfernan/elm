@@ -1,7 +1,7 @@
 [package]
 name = "elm"
 description = "A minimalist framework for Extreme Learning Machines (ELMs)."
-version = "0.1.2"
+version = "0.2.0"
 edition = "2021"
 license = "MIT"
 keywords = ["ai", "blas", "elm", "machine-learning", "neural-network"]
@@ -9,6 +9,9 @@ categories = ["mathematics", "science", "science::neuroscience", "science::robot
 repository = "https://github.com/mbfernan/elm.git"
 authors = [
     "Marcos Blanco Fernandes <mbfernan@outlook.com>"
+]
+exclude = [
+    "src/docs"
 ]
 
 [lib]
