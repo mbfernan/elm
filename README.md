@@ -13,10 +13,10 @@ References:
 ## Basic usage
 
 ```RUST
-use elm::{ELM, Epsilon, Verbose};
+use elm::{ELM, Epsilon};
 use elm::activation_functions::ActivationFunction;
 
-let mut elm = ELM::new(2, 4, 2, ActivationFunction::LeakyReLU, Epsilon::Default, Verbose::Quiet);
+let mut elm = ELM::new(2, 4, 2, ActivationFunction::LeakyReLU, Epsilon::Default);
 let inputs: Vec<Vec<f64>> = vec![vec![1.0, 0.0], vec![1.0, 0.0]];
 let targets: Vec<Vec<f64>> = vec![vec![1.0, 1.0], vec![1.0, 1.5]];
 elm.train(&inputs, &targets);

@@ -1,5 +1,5 @@
 //! Extreme Learning Machine (ELM) crate. A minimalistic and flexible crate that can be used to train ELMs, a type of
-//! Neural Networks. Currently supports a single hidden layer and regression tasks.
+//! Neural Networks, more precisely, Single Hidden Layer Feedforward Neural Network (SFLN).
 //!
 //! References:
 //!
@@ -7,20 +7,18 @@
 //!
 //! - Wikipedia: <https://en.wikipedia.org/wiki/Extreme_learning_machine>
 
-/// Provides Activation Functions utilities.
+/// Activation functions
 pub mod activation_functions;
-/// Provides Training Metrics utilities.
-pub mod training_metrics;
+/// Loss functions
+pub mod loss;
 
 use nalgebra::DMatrix;
 use rand::{
     distributions::{Distribution, Uniform},
     rngs::ThreadRng,
 };
-use std::time::Instant;
 
 use crate::activation_functions::ActivationFunction;
-use crate::training_metrics::ELMTrainingMetrics;
 
 /// Extreme Learning Machine (ELM) base struct.
 pub struct ELM {
@@ -33,9 +31,7 @@ pub struct ELM {
     biases: DMatrix<f64>,
     hidden: DMatrix<f64>,
     beta: DMatrix<f64>,
-    training_metrics: ELMTrainingMetrics,
     epsilon: f64,
-    verbose: Verbose,
 }
 
 impl ELM {
@@ -52,7 +48,6 @@ impl ELM {
         output_size: usize,
         activation_function: ActivationFunction,
         epsilon: Epsilon,
-        verbose: Verbose,
     ) -> Self {
         epsilon.verify();
         let mut rng: ThreadRng = rand::thread_rng();
@@ -71,9 +66,7 @@ impl ELM {
             biases: DMatrix::from_fn(1, hidden_size, |_, _| biases_distribution.sample(&mut rng)),
             hidden: DMatrix::zeros(hidden_size, 1),
             beta: DMatrix::zeros(hidden_size, output_size),
-            training_metrics: ELMTrainingMetrics::default(),
             epsilon: epsilon.get(),
-            verbose,
         }
     }
 
@@ -93,16 +86,16 @@ impl ELM {
     ///
     /// **targets** shape: (n_data_points x output_size)
     ///
-    /// # Data types:
+    /// ## Data types:
     ///
     /// This function accepts inputs and targets as `Vec<Vec<f64>>` or `nalgebra::DMatrix<f64>`.
     ///
-    /// # Examples
+    /// ## Examples
     ///
     /// Basic usage:
     ///
     /// ```
-    /// use elm::{ELM, Epsilon, Verbose};
+    /// use elm::{ELM, Epsilon};
     /// use elm::activation_functions::ActivationFunction;
     ///
     /// let mut elm = ELM::new(
@@ -111,7 +104,6 @@ impl ELM {
     ///     2,
     ///     ActivationFunction::LeakyReLU,
     ///     Epsilon::Default,
-    ///     Verbose::Quiet,
     /// );
     ///
     /// // Each row is a data point. Note input size = 2
@@ -139,74 +131,40 @@ impl ELM {
     /// elm.train(&inputs, &targets);
     /// ```
     ///
-    /// # Panics:
+    /// ## Panics:
     ///
     /// Panics if inputs and targets have different number of data points.
     ///
-    /// # Performance:
+    /// ## Performance:
     ///
     /// If failed to calculate **pseudo inverse**, Beta will be set to `None` and no training metrics will be available.
-    pub fn train<T: ToMatrix>(&mut self, inputs: &T, targets: &T) {
-        let timer = Instant::now();
-
+    pub fn train<T: ToMatrix, I: ToMatrix + FromMatrix>(&mut self, inputs: &I, targets: &T) {
         self.hidden = self.pass_to_hidden(inputs);
 
         let moore_penrose = (self.hidden.transpose() * &self.hidden)
             .pseudo_inverse(self.epsilon)
             .unwrap(); // Only fallible if Epsilon is negative which is checked when ELM is instantiated.
 
-        let targets = targets.to_matrix();
-
-        self.beta = (moore_penrose * self.hidden.transpose()) * &targets;
-
-        self.training_metrics = ELMTrainingMetrics {
-            training_mse: self.calculate_mse(&targets),
-            training_duration: Some(timer.elapsed()),
-        };
-
-        if self.verbose == Verbose::Full || self.verbose == Verbose::TrainingMetrics {
-            self.training_metrics.display();
-        }
-    }
-
-    fn calculate_mse<T: ToMatrix>(&self, targets: &T) -> Option<f64> {
-        let targets = targets.to_matrix();
-        let flattened_targets = flatten_matrix(&targets);
-        let flattened_outputs = flatten_matrix(&self.predict(&targets));
-        if flattened_outputs.len() != flattened_targets.len() {
-            if self.verbose == Verbose::Full || self.verbose == Verbose::Warnings {
-                println!("MSE WARNING: target lenght different the output length.")
-            }
-            return None;
-        }
-
-        // Mean Squared Error
-        let mse = flattened_outputs
-            .iter()
-            .zip(flattened_targets.iter())
-            .fold(0.0, |acc, (output, target)| acc + (output - target).powi(2))
-            / flattened_outputs.len() as f64;
-
-        Some(mse)
+        self.beta = (moore_penrose * self.hidden.transpose()) * &targets.to_matrix();
     }
 
     /// Forward pass on ELM, used to predict values based on inputs provided and once the ELM has already being
     /// [`trained`].
     ///
-    /// # Data types:
+    /// ## Data types:
     ///
     /// This function accepts inputs as `Vec<Vec<f64>>` or `nalgebra::DMatrix<f64>`.
     /// Outputs will have the same type as the inputs.
     ///
-    /// # Examples
+    /// ## Examples
     ///
     /// Basic usage:
     ///
     /// ```
-    /// use elm::{ELM, Epsilon, Verbose};
+    /// use elm::{ELM, Epsilon};
     /// use elm::activation_functions::ActivationFunction;
     ///
-    /// let mut elm = ELM::new(2, 4, 2, ActivationFunction::LeakyReLU, Epsilon::Default, Verbose::Quiet);
+    /// let mut elm = ELM::new(2, 4, 2, ActivationFunction::LeakyReLU, Epsilon::Default);
     /// let inputs: Vec<Vec<f64>> = vec![vec![1.0, 0.0], vec![1.0, 0.0]];
     /// let targets: Vec<Vec<f64>> = vec![vec![1.0, 1.0], vec![1.0, 1.5]];
     /// elm.train(&inputs, &targets);
@@ -222,34 +180,24 @@ impl ELM {
         <T as FromMatrix>::from_matrix(res)
     }
 
-    /// Retrieves ELM input layer size.
+    /// ELM input layer size.
     pub fn input_size(&self) -> usize {
         self.input_size
     }
 
-    /// Retrieves ELM hidden layer size.
+    /// ELM hidden layer size.
     pub fn hidden_size(&self) -> usize {
         self.hidden_size
     }
 
-    /// Retrieves ELM output layer size.
+    /// ELM output layer size.
     pub fn output_size(&self) -> usize {
         self.output_size
     }
 
-    /// Retrieves ELM activation function.
+    /// ELM activation function.
     pub fn activation_function(&self) -> ActivationFunction {
         self.activation_function.clone()
-    }
-
-    /// Retrieves training metrics.
-    pub fn training_metrics(&self) -> ELMTrainingMetrics {
-        self.training_metrics.clone()
-    }
-
-    /// Displayes training metrics.
-    pub fn display_training_metrics(&self) {
-        self.training_metrics.display();
     }
 }
 
@@ -341,25 +289,10 @@ impl Epsilon {
     }
 }
 
-/// Used for defining verbosity.
-#[derive(PartialEq)]
-pub enum Verbose {
-    /// No print statements will be displayed.
-    Quiet,
-    /// Only display warnings.
-    Warnings,
-    /// Only display training metrics after [`training`] is completed.
-    ///
-    /// [`training`]: struct.ELM.html#method.train
-    TrainingMetrics,
-    /// Display all print statements.
-    Full,
-}
-
 #[cfg(test)]
 mod tests {
     use super::activation_functions::ActivationFunction;
-    use super::{Epsilon, Verbose, ELM};
+    use super::{Epsilon, ELM};
 
     #[test]
     #[should_panic]
@@ -370,7 +303,6 @@ mod tests {
             2,
             ActivationFunction::LeakyReLU,
             Epsilon::Custom(-0.01),
-            Verbose::Quiet,
         );
     }
 }
