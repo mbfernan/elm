@@ -7,7 +7,6 @@
 //!
 //! - Wikipedia: <https://en.wikipedia.org/wiki/Extreme_learning_machine>
 
-
 /// Provides Activation Functions utilities.
 pub mod activation_functions;
 /// Provides Training Metrics utilities.
@@ -35,7 +34,7 @@ pub struct ELM {
     hidden: DMatrix<f64>,
     beta: Option<DMatrix<f64>>,
     training_metrics: ELMTrainingMetrics,
-    epsilon: Epsilon,
+    epsilon: f64,
     verbose: Verbose,
 }
 
@@ -55,6 +54,7 @@ impl ELM {
         epsilon: Epsilon,
         verbose: Verbose,
     ) -> Self {
+        epsilon.verify();
         let mut rng: ThreadRng = rand::thread_rng();
         let weights_distribution: Uniform<f64> = Uniform::from(-0.5..=0.5);
         let biases_distribution: Uniform<f64> = Uniform::from(0.0..=1.0);
@@ -72,7 +72,7 @@ impl ELM {
             hidden: DMatrix::zeros(hidden_size, 1),
             beta: None,
             training_metrics: ELMTrainingMetrics::default(),
-            epsilon,
+            epsilon: epsilon.get(),
             verbose,
         }
     }
@@ -148,26 +148,20 @@ impl ELM {
     /// If failed to calculate **pseudo inverse**, Beta will be set to `None` and no training metrics will be available.
     pub fn train<T: ToMatrix>(&mut self, inputs: &T, targets: &T) {
         let timer = Instant::now();
+
         self.hidden = self.pass_to_hidden(inputs);
-        let moore_penrose =
-            (self.hidden.transpose() * &self.hidden).pseudo_inverse(self.epsilon.get());
+
+        let moore_penrose = (self.hidden.transpose() * &self.hidden)
+            .pseudo_inverse(self.epsilon)
+            .unwrap();      // Only fallible if Epsilon is negative which is checked when ELM is instantiated.
 
         let targets = targets.to_matrix();
-        match moore_penrose {
-            Ok(mp) => {
-                self.beta = Some((mp * self.hidden.transpose()) * &targets);
-                self.training_metrics = ELMTrainingMetrics {
-                    training_mse: self.calculate_mse(&targets),
-                    training_duration: Some(timer.elapsed()),
-                };
-            }
-            Err(_) => {
-                if self.verbose == Verbose::Full || self.verbose == Verbose::Warnings {
-                    println!("WARNING: Could not calculate Pseudo Inverse.");
-                }
-                self.beta = None;
-                self.training_metrics = ELMTrainingMetrics::default();
-            }
+
+        self.beta = Some((moore_penrose * self.hidden.transpose()) * &targets);
+
+        self.training_metrics = ELMTrainingMetrics {
+            training_mse: self.calculate_mse(&targets),
+            training_duration: Some(timer.elapsed()),
         };
 
         if self.verbose == Verbose::Full || self.verbose == Verbose::TrainingMetrics {
@@ -334,7 +328,7 @@ pub fn flatten_matrix(matrix: &DMatrix<f64>) -> Vec<f64> {
 }
 
 const EPSILON: f64 = 0.0001;
-/// All singular values below Epsilon are considered equal to 0.
+/// All singular values below Epsilon are considered equal to 0. Panics if Custom Epsilon is negative.
 pub enum Epsilon {
     /// Default value for Epsilon: 0.0001
     Default,
@@ -343,6 +337,14 @@ pub enum Epsilon {
 }
 
 impl Epsilon {
+    fn verify(&self) {
+        if let Epsilon::Custom(eps) = self {
+            if *eps < 0.0 {
+                panic!("Epsilon must be non-negative.");
+            }
+        };
+    }
+
     fn get(&self) -> f64 {
         match self {
             Epsilon::Default => EPSILON,
@@ -364,4 +366,23 @@ pub enum Verbose {
     TrainingMetrics,
     /// Display all print statements.
     Full,
+}
+
+#[cfg(test)]
+mod tests {
+    use super::activation_functions::ActivationFunction;
+    use super::{Epsilon, Verbose, ELM};
+
+    #[test]
+    #[should_panic]
+    fn test_epsilon() {
+        let _ = ELM::new(
+            2,
+            4,
+            2,
+            ActivationFunction::LeakyReLU,
+            Epsilon::Custom(-0.01),
+            Verbose::Quiet,
+        );
+    }
 }
