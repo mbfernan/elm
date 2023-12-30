@@ -10,7 +10,15 @@ pub enum ActivationFunction {
     /// - (2013) [<https://ai.stanford.edu/%7Eamaas/papers/relu_hybrid_icml2013_final.pdf>]
     ///
     /// - (2015) [<https://arxiv.org/abs/1505.00853>]
-    LeakyRelu,
+    LeakyReLU,
+    /// Rectified Linear Units
+    ///
+    /// # Papers:
+    ///
+    /// - (2010) [<https://www.cs.toronto.edu/~hinton/absps/reluICML.pdf>]
+    ///
+    /// - (2018) [<https://arxiv.org/abs/1803.08375>]
+    ReLU,
     /// Sigmoidal
     ///
     /// # References:
@@ -34,7 +42,8 @@ pub enum ActivationFunction {
 /// Map ActivationFunction enum variant to its function
 pub fn map(activation_function: &ActivationFunction) -> fn(&mut f64) {
     match activation_function {
-        ActivationFunction::LeakyRelu => leaky_relu,
+        ActivationFunction::LeakyReLU => leaky_relu,
+        ActivationFunction::ReLU => relu,
         ActivationFunction::Sigmoidal => sigmoidal,
         ActivationFunction::Linear => linear,
         ActivationFunction::Step => step,
@@ -62,6 +71,29 @@ pub fn map(activation_function: &ActivationFunction) -> fn(&mut f64) {
 pub fn leaky_relu(x: &mut f64) {
     if *x < 0.0 {
         *x *= 0.01;
+    }
+}
+
+/// [`Rectified Linear Units`]
+///
+/// ```
+/// use elm::activation_functions::relu;
+///
+/// // When x >= 0.0
+/// let mut x = 18.04;
+/// relu(&mut x);
+/// assert_eq!(x, 18.04);
+///
+/// // when x < 0.0
+/// let mut x = -18.04;
+/// relu(&mut x);
+/// assert_eq!(x, 0.0);
+/// ```
+///
+/// [`Rectified Linear Units`]: enum.ActivationFunction.html#variant.relu
+pub fn relu(x: &mut f64) {
+    if *x < 0.0 {
+        *x = 0.0;
     }
 }
 
@@ -127,7 +159,7 @@ pub fn linear(_x: &mut f64) {}
 ///
 /// ```
 ///
-/// [`Step`]: enum.ActivationFunction.html#variant.Step
+/// [`Step`]: enum.ActivationFunction.html#variant.step
 pub fn step(x: &mut f64) {
     if *x < 0.0 {
         *x = 0.0;
@@ -158,7 +190,7 @@ pub fn step(x: &mut f64) {
 ///
 /// ```
 ///
-/// [`Hyperbolic Tangent`]: enum.ActivationFunction.html#variant.TanH
+/// [`Hyperbolic Tangent`]: enum.ActivationFunction.html#variant.tanh
 pub fn tanh(x: &mut f64) {
     *x = 2.0 / (1.0 + E.powf(-2.0 * (*x))) - 1.0;
 }
