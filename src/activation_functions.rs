@@ -7,17 +7,17 @@ pub enum ActivationFunction {
     ///
     /// # Papers:
     ///
-    /// - (2013) [<https://ai.stanford.edu/%7Eamaas/papers/relu_hybrid_icml2013_final.pdf>]
+    /// - (2013) <https://ai.stanford.edu/%7Eamaas/papers/relu_hybrid_icml2013_final.pdf>
     ///
-    /// - (2015) [<https://arxiv.org/abs/1505.00853>]
+    /// - (2015) <https://arxiv.org/abs/1505.00853>
     LeakyReLU,
     /// Rectified Linear Units
     ///
     /// # Papers:
     ///
-    /// - (2010) [<https://www.cs.toronto.edu/~hinton/absps/reluICML.pdf>]
+    /// - (2010) <https://www.cs.toronto.edu/~hinton/absps/reluICML.pdf>
     ///
-    /// - (2018) [<https://arxiv.org/abs/1803.08375>]
+    /// - (2018) <https://arxiv.org/abs/1803.08375>
     ReLU,
     /// Sigmoidal
     ///
@@ -25,9 +25,7 @@ pub enum ActivationFunction {
     ///
     /// - Wikipedia: <https://en.wikipedia.org/wiki/Sigmoid_function>
     Sigmoidal,
-    /// Linear
-    ///
-    /// Not widely used in the ELM environment.
+    /// Identity
     Linear,
     /// Step function at 0
     Step,
@@ -37,6 +35,12 @@ pub enum ActivationFunction {
     ///
     /// - Wikipedia: <https://en.wikipedia.org/wiki/Hyperbolic_functions>
     TanH,
+    /// Exponential Linear Units
+    ///
+    /// # Papers:
+    ///
+    /// - (2016) <https://arxiv.org/pdf/1511.07289.pdf>
+    ELU,
 }
 
 /// Map ActivationFunction enum variant to its function
@@ -48,6 +52,7 @@ pub fn map(activation_function: &ActivationFunction) -> fn(&mut f64) {
         ActivationFunction::Linear => linear,
         ActivationFunction::Step => step,
         ActivationFunction::TanH => tanh,
+        ActivationFunction::ELU => elu,
     }
 }
 
@@ -67,7 +72,7 @@ pub fn map(activation_function: &ActivationFunction) -> fn(&mut f64) {
 /// assert_eq!(x, -18.04 * 0.01);
 /// ```
 ///
-/// [`Leaky Rectified Linear Units`]: enum.ActivationFunction.html#variant.leakyrelu
+/// [`Leaky Rectified Linear Units`]: enum.ActivationFunction.html#variant.LeakyReLU
 pub fn leaky_relu(x: &mut f64) {
     if *x < 0.0 {
         *x *= 0.01;
@@ -90,7 +95,7 @@ pub fn leaky_relu(x: &mut f64) {
 /// assert_eq!(x, 0.0);
 /// ```
 ///
-/// [`Rectified Linear Units`]: enum.ActivationFunction.html#variant.relu
+/// [`Rectified Linear Units`]: enum.ActivationFunction.html#variant.ReLU
 pub fn relu(x: &mut f64) {
     if *x < 0.0 {
         *x = 0.0;
@@ -118,7 +123,7 @@ pub fn relu(x: &mut f64) {
 /// assert_eq!(x, 0.0);
 /// ```
 ///
-/// [`Sigmoidal`]: enum.ActivationFunction.html#variant.sigmoidal
+/// [`Sigmoidal`]: enum.ActivationFunction.html#variant.Sigmoidal
 pub fn sigmoidal(x: &mut f64) {
     *x = 1.0 / (1.0 + E.powf(-(*x)));
 }
@@ -134,7 +139,7 @@ pub fn sigmoidal(x: &mut f64) {
 /// assert_eq!(x, 18.04);
 /// ```
 ///
-/// [`Linear`]: enum.ActivationFunction.html#variant.linear
+/// [`Linear`]: enum.ActivationFunction.html#variant.Linear
 pub fn linear(_x: &mut f64) {}
 
 /// [`Step`]
@@ -159,7 +164,7 @@ pub fn linear(_x: &mut f64) {}
 ///
 /// ```
 ///
-/// [`Step`]: enum.ActivationFunction.html#variant.step
+/// [`Step`]: enum.ActivationFunction.html#variant.Step
 pub fn step(x: &mut f64) {
     if *x < 0.0 {
         *x = 0.0;
@@ -190,7 +195,37 @@ pub fn step(x: &mut f64) {
 ///
 /// ```
 ///
-/// [`Hyperbolic Tangent`]: enum.ActivationFunction.html#variant.tanh
+/// [`Hyperbolic Tangent`]: enum.ActivationFunction.html#variant.TanH
 pub fn tanh(x: &mut f64) {
     *x = 2.0 / (1.0 + E.powf(-2.0 * (*x))) - 1.0;
+}
+
+const ALPHA: f64 = 1.0;
+/// [`Exponential Linear Units`]
+///
+/// ```
+/// use elm::activation_functions::elu;
+///
+/// // When x >= 0.0
+/// let mut x = 18.04;
+/// elu(&mut x);
+/// assert_eq!(x, 18.04);
+///
+/// // when x == 0.0
+/// let mut x = 0.0;
+/// elu(&mut x);
+/// assert_eq!(x, 0.0);
+///
+/// // when x << 0.0
+/// let mut x = -1000.0;
+/// elu(&mut x);
+/// assert_eq!(x, -1.0);
+///
+/// ```
+///
+/// [`Exponential Linear Units`]: enum.ActivationFunction.html#variant.ELU
+pub fn elu(x: &mut f64) {
+    if *x < 0.0 {
+        *x = ALPHA * (E.powf(*x) - 1.0);
+    }
 }
