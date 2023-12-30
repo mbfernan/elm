@@ -41,7 +41,7 @@ pub enum ActivationFunction {
     ///
     /// - Wikipedia: <https://en.wikipedia.org/wiki/Sigmoid_function>
     ///
-    /// ![Sigmoidal](https://github.com/mbfernan/elm/blob/e3d5484c9680773f4694a8c88f15646fab399a3d/src/docs/activation_functions/Rectified%20Linear%20Units.png)
+    /// ![Sigmoidal](https://github.com/mbfernan/elm/blob/7fe75cc141db217458fa75fa30b4a3252cc9acca/src/docs/activation_functions/Sigmoidal.png)
     Sigmoidal,
     /// Step function at 0
     ///

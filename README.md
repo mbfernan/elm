@@ -35,7 +35,7 @@ let prediction = elm.predict(&new_inputs);
 
 ![ReLU](https://github.com/mbfernan/elm/blob/e3d5484c9680773f4694a8c88f15646fab399a3d/src/docs/activation_functions/Rectified%20Linear%20Units.png)
 
-![Sigmoidal](https://github.com/mbfernan/elm/blob/e3d5484c9680773f4694a8c88f15646fab399a3d/src/docs/activation_functions/Rectified%20Linear%20Units.png)
+![Sigmoidal](https://github.com/mbfernan/elm/blob/7fe75cc141db217458fa75fa30b4a3252cc9acca/src/docs/activation_functions/Sigmoidal.png)
 
 ![Step](https://github.com/mbfernan/elm/blob/e3d5484c9680773f4694a8c88f15646fab399a3d/src/docs/activation_functions/Step.png)
 
