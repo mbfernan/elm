@@ -28,7 +28,6 @@ let prediction = elm.predict(&new_inputs);
 ## Road map
 
 - [ ] Export module: to save and load previously trained models
-- [ ] Additional activation functions
 - [ ] Idiomatic error handling
 - [ ] Loss trait to allow custom implementations
 - [ ] Add illustrations for activation functions
