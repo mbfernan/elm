@@ -32,7 +32,7 @@ pub struct ELM {
     weights: DMatrix<f64>,
     biases: DMatrix<f64>,
     hidden: DMatrix<f64>,
-    beta: Option<DMatrix<f64>>,
+    beta: DMatrix<f64>,
     training_metrics: ELMTrainingMetrics,
     epsilon: f64,
     verbose: Verbose,
@@ -70,7 +70,7 @@ impl ELM {
             }),
             biases: DMatrix::from_fn(1, hidden_size, |_, _| biases_distribution.sample(&mut rng)),
             hidden: DMatrix::zeros(hidden_size, 1),
-            beta: None,
+            beta: DMatrix::zeros(hidden_size, output_size),
             training_metrics: ELMTrainingMetrics::default(),
             epsilon: epsilon.get(),
             verbose,
@@ -153,11 +153,11 @@ impl ELM {
 
         let moore_penrose = (self.hidden.transpose() * &self.hidden)
             .pseudo_inverse(self.epsilon)
-            .unwrap();      // Only fallible if Epsilon is negative which is checked when ELM is instantiated.
+            .unwrap(); // Only fallible if Epsilon is negative which is checked when ELM is instantiated.
 
         let targets = targets.to_matrix();
 
-        self.beta = Some((moore_penrose * self.hidden.transpose()) * &targets);
+        self.beta = (moore_penrose * self.hidden.transpose()) * &targets;
 
         self.training_metrics = ELMTrainingMetrics {
             training_mse: self.calculate_mse(&targets),
@@ -172,10 +172,7 @@ impl ELM {
     fn calculate_mse<T: ToMatrix>(&self, targets: &T) -> Option<f64> {
         let targets = targets.to_matrix();
         let flattened_targets = flatten_matrix(&targets);
-        let flattened_outputs = match self.predict(&targets) {
-            Some(outputs) => flatten_matrix(&outputs),
-            None => return None,
-        };
+        let flattened_outputs = flatten_matrix(&self.predict(&targets));
         if flattened_outputs.len() != flattened_targets.len() {
             if self.verbose == Verbose::Full || self.verbose == Verbose::Warnings {
                 println!("MSE WARNING: target lenght different the output length.")
@@ -219,19 +216,10 @@ impl ELM {
     /// ```
     ///
     /// [`trained`]: struct.ELM.html#method.train
-    pub fn predict<T: ToMatrix + FromMatrix>(
-        &self,
-        inputs: &T,
-    ) -> Option<<T as FromMatrix>::Output> {
+    pub fn predict<T: ToMatrix + FromMatrix>(&self, inputs: &T) -> <T as FromMatrix>::Output {
         let hidden = self.pass_to_hidden(inputs);
-        match &self.beta {
-            Some(beta) => {
-                let res = hidden * beta;
-                let to_t = <T as FromMatrix>::from_matrix(res);
-                Some(to_t)
-            }
-            None => None,
-        }
+        let res = hidden * &self.beta;
+        <T as FromMatrix>::from_matrix(res)
     }
 
     /// Retrieves ELM input layer size.
