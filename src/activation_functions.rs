@@ -21,6 +21,8 @@ pub enum ActivationFunction {
     ///
     /// Not widely used in the ELM environment.
     Linear,
+    /// Step function
+    Step,
 }
 
 /// Map ActivationFunction enum variant to its function
@@ -29,6 +31,7 @@ pub fn map(activation_function: &ActivationFunction) -> fn(&mut f64) {
         ActivationFunction::LeakyRelu => leaky_relu,
         ActivationFunction::Sigmoidal => sigmoidal,
         ActivationFunction::Linear => linear,
+        ActivationFunction::Step => step,
     }
 }
 
@@ -37,7 +40,7 @@ pub fn map(activation_function: &ActivationFunction) -> fn(&mut f64) {
 /// ```
 /// use elm::activation_functions::leaky_relu;
 ///
-/// // When x >= 0
+/// // When x >= 0.0
 /// let mut x = 18.04;
 /// leaky_relu(&mut x);
 /// assert_eq!(x, 18.04);
@@ -50,7 +53,7 @@ pub fn map(activation_function: &ActivationFunction) -> fn(&mut f64) {
 ///
 /// [`Leaky Rectified Linear Units`]: enum.ActivationFunction.html#variant.leakyrelu
 pub fn leaky_relu(x: &mut f64) {
-    if *x < 0f64 {
+    if *x < 0.0 {
         *x *= 0.01;
     }
 }
@@ -60,7 +63,7 @@ pub fn leaky_relu(x: &mut f64) {
 /// ```
 /// use elm::activation_functions::sigmoidal;
 ///
-/// // When x == 0
+/// // When x == 0.0
 /// let mut x = 0.0;
 /// sigmoidal(&mut x);
 /// assert_eq!(x, 0.5);
@@ -86,7 +89,7 @@ pub fn sigmoidal(x: &mut f64) {
 /// ```
 /// use elm::activation_functions::linear;
 ///
-/// // When x == 0
+/// // When x == 0.0
 /// let mut x = 18.04;
 /// linear(&mut x);
 /// assert_eq!(x, 18.04);
@@ -94,3 +97,34 @@ pub fn sigmoidal(x: &mut f64) {
 ///
 /// [`Linear`]: enum.ActivationFunction.html#variant.linear
 pub fn linear(_x: &mut f64) {}
+
+/// [`Step`]
+///
+/// ```
+/// use elm::activation_functions::step;
+///
+/// // When x == 0.0
+/// let mut x = 0.0;
+/// step(&mut x);
+/// assert_eq!(x, 1.0);
+///
+/// // When x >> 0.0
+/// let mut x = 10000.0;
+/// step(&mut x);
+/// assert_eq!(x, 1.0);
+///
+/// // When x << 0.0
+/// let mut x = -10000.0;
+/// step(&mut x);
+/// assert_eq!(x, 0.0);
+///
+/// ```
+///
+/// [`Step`]: enum.ActivationFunction.html#variant.Step
+pub fn step(x: &mut f64) {
+    if *x < 0.0 {
+        *x = 0.0;
+    } else {
+        *x = 1.0;
+    }
+}
