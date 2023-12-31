@@ -33,7 +33,7 @@ pub enum ActivationFunction {
     ///
     /// - (2018) <https://arxiv.org/abs/1803.08375>
     ///
-    /// ![ReLU](https://github.com/mbfernan/elm/blob/5102a66694bf1c8d80cff766c95e0f686424db98/src/docs/activation_functions/Rectified%20Linear%20Units.png?raw=true)
+    /// ![ReLU](https://github.com/mbfernan/elm/blob/bb06dd8dd29cc6e7bc822e73f1e012e38f92cd04/src/docs/activation_functions/Rectified%20Linear%20Units.png?raw=true)
     ReLU,
     /// Sigmoidal
     ///
