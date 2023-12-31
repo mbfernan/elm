@@ -1,7 +1,7 @@
 [package]
 name = "elm"
 description = "A minimalist framework for Extreme Learning Machines (ELMs)."
-version = "0.2.0"
+version = "0.2.1"
 edition = "2021"
 license = "MIT"
 keywords = ["ai", "blas", "elm", "machine-learning", "neural-network"]

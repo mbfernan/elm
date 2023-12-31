@@ -9,7 +9,7 @@ pub enum ActivationFunction {
     ///
     /// - (2016) <https://arxiv.org/pdf/1511.07289.pdf>
     ///
-    /// ![ELU](https://github.com/mbfernan/elm/blob/e3d5484c9680773f4694a8c88f15646fab399a3d/src/docs/activation_functions/Exponential%20Linear%20Units.png)
+    /// ![ELU](https://github.com/mbfernan/elm/blob/e3d5484c9680773f4694a8c88f15646fab399a3d/src/docs/activation_functions/Exponential%20Linear%20Units.png?raw=true)
     ELU,
     /// Leaky Rectified Linear Units
     ///
@@ -19,11 +19,11 @@ pub enum ActivationFunction {
     ///
     /// - (2015) <https://arxiv.org/abs/1505.00853>
     ///
-    /// ![LeakyReLU](https://github.com/mbfernan/elm/blob/e3d5484c9680773f4694a8c88f15646fab399a3d/src/docs/activation_functions/Leaky%20Rectified%20Linear%20Units.png)
+    /// ![LeakyReLU](https://github.com/mbfernan/elm/blob/e3d5484c9680773f4694a8c88f15646fab399a3d/src/docs/activation_functions/Leaky%20Rectified%20Linear%20Units.png?raw=true)
     LeakyReLU,
     /// Identity
     ///
-    /// ![Linear](https://github.com/mbfernan/elm/blob/e3d5484c9680773f4694a8c88f15646fab399a3d/src/docs/activation_functions/Linear.png)
+    /// ![Linear](https://github.com/mbfernan/elm/blob/e3d5484c9680773f4694a8c88f15646fab399a3d/src/docs/activation_functions/Linear.png?raw=true)
     Linear,
     /// Rectified Linear Units
     ///
@@ -33,7 +33,7 @@ pub enum ActivationFunction {
     ///
     /// - (2018) <https://arxiv.org/abs/1803.08375>
     ///
-    /// ![ReLU](https://github.com/mbfernan/elm/blob/e3d5484c9680773f4694a8c88f15646fab399a3d/src/docs/activation_functions/Rectified%20Linear%20Units.png)
+    /// ![ReLU](https://github.com/mbfernan/elm/blob/e3d5484c9680773f4694a8c88f15646fab399a3d/src/docs/activation_functions/Rectified%20Linear%20Units.png?raw=true)
     ReLU,
     /// Sigmoidal
     ///
@@ -41,11 +41,11 @@ pub enum ActivationFunction {
     ///
     /// - Wikipedia: <https://en.wikipedia.org/wiki/Sigmoid_function>
     ///
-    /// ![Sigmoidal](https://github.com/mbfernan/elm/blob/7fe75cc141db217458fa75fa30b4a3252cc9acca/src/docs/activation_functions/Sigmoidal.png)
+    /// ![Sigmoidal](https://github.com/mbfernan/elm/blob/7fe75cc141db217458fa75fa30b4a3252cc9acca/src/docs/activation_functions/Sigmoidal.png?raw=true)
     Sigmoidal,
     /// Step function at 0
     ///
-    /// ![Step](https://github.com/mbfernan/elm/blob/e3d5484c9680773f4694a8c88f15646fab399a3d/src/docs/activation_functions/Step.png)
+    /// ![Step](https://github.com/mbfernan/elm/blob/e3d5484c9680773f4694a8c88f15646fab399a3d/src/docs/activation_functions/Step.png?raw=true)
     Step,
     /// Hyperbolic tangent
     ///
@@ -53,7 +53,7 @@ pub enum ActivationFunction {
     ///
     /// - Wikipedia: <https://en.wikipedia.org/wiki/Hyperbolic_functions>
     ///
-    /// ![TanH](https://github.com/mbfernan/elm/blob/e3d5484c9680773f4694a8c88f15646fab399a3d/src/docs/activation_functions/Hyperbolic%20Tangent.png)
+    /// ![TanH](https://github.com/mbfernan/elm/blob/e3d5484c9680773f4694a8c88f15646fab399a3d/src/docs/activation_functions/Hyperbolic%20Tangent.png?raw=true)
     TanH,
 }
 
