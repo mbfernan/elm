@@ -29,7 +29,6 @@ pub struct ELM {
     activation_function: ActivationFunction,
     weights: DMatrix<f64>,
     biases: DMatrix<f64>,
-    hidden: DMatrix<f64>,
     beta: DMatrix<f64>,
     epsilon: f64,
 }
@@ -64,7 +63,6 @@ impl ELM {
                 weights_distribution.sample(&mut rng)
             }),
             biases: DMatrix::from_fn(1, hidden_size, |_, _| biases_distribution.sample(&mut rng)),
-            hidden: DMatrix::zeros(hidden_size, 1),
             beta: DMatrix::zeros(hidden_size, output_size),
             epsilon: epsilon.get(),
         }
@@ -139,13 +137,13 @@ impl ELM {
     ///
     /// If failed to calculate **pseudo inverse**, Beta will be set to `None` and no training metrics will be available.
     pub fn train<T: ToMatrix, I: ToMatrix + FromMatrix>(&mut self, inputs: &I, targets: &T) {
-        self.hidden = self.pass_to_hidden(inputs);
+        let hidden = self.pass_to_hidden(inputs);
 
-        let moore_penrose = (self.hidden.transpose() * &self.hidden)
+        let moore_penrose = (hidden.transpose() * &hidden)
             .pseudo_inverse(self.epsilon)
             .unwrap(); // Only fallible if Epsilon is negative which is checked when ELM is instantiated.
 
-        self.beta = (moore_penrose * self.hidden.transpose()) * &targets.to_matrix();
+        self.beta = (moore_penrose * hidden.transpose()) * &targets.to_matrix();
     }
 
     /// Forward pass on ELM, used to predict values based on inputs provided and once the ELM has already being
