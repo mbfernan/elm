@@ -1,7 +1,9 @@
+use serde::{Deserialize, Serialize};
+
 const E: f64 = std::f64::consts::E;
 
 /// Activation Functions to be used in the hidden layer.
-#[derive(Clone)]
+#[derive(Clone, Deserialize, Serialize)]
 pub enum ActivationFunction {
     /// Exponential Linear Units
     ///
