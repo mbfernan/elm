@@ -65,7 +65,7 @@ impl ELM {
                 weights_distribution.sample(&mut rng)
             }),
             biases: DMatrix::from_fn(1, hidden_size, |_, _| biases_distribution.sample(&mut rng)),
-            beta: DMatrix::zeros(hidden_size, output_size),
+            beta: DMatrix::from_element(hidden_size, output_size, 1.0),
             epsilon: epsilon.get(),
         }
     }
