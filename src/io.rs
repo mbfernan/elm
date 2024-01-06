@@ -73,7 +73,9 @@ impl From<IOELM> for ELM {
 
 #[derive(Debug)]
 pub enum Error {
+    /// Adapter from [`serde_json::Error`]
     JSONError(serde_json::Error),
+    /// Adapter from [`std::io::Error`]
     FileError(std::io::Error),
 }
 
