@@ -23,6 +23,7 @@ use rand::{
 use crate::activation_functions::ActivationFunction;
 
 /// Extreme Learning Machine (ELM) base struct.
+#[derive(Clone)]
 pub struct ELM {
     input_size: usize,
     hidden_size: usize,
